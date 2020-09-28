@@ -266,12 +266,12 @@ public:
     }
 
     return shrink::eachElement(shrinkables,
-                               [=](const Shrinkable<T> &s) {
-                                 const auto valueKey = m_f(s.value());
+                               [this,keys](const Shrinkable<T> &s) {
+                                 const auto valueKey = this->m_f(s.value());
                                  return seq::filter(
                                      s.shrinks(),
-                                     [=](const Shrinkable<T> &shrink) {
-                                       const auto shrinkKey = m_f(shrink.value());
+                                     [this,valueKey,keys](const Shrinkable<T> &shrink) {
+                                       const auto shrinkKey = this->m_f(shrink.value());
                                        return (!(valueKey < shrinkKey) &&
                                                !(shrinkKey < valueKey)) ||
                                            keys->count(shrinkKey) == 0;
